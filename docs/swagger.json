@@ -13,12 +13,12 @@
   },
   "servers": [
     {
-      "url": "http://10.0.0.172:3003/auth/realms",
+      "url": "http://10.0.0.172:3003/auth/realms/sport-club/protocol/openid-connect",
       "description": "Api de teste"
     }
   ],
   "paths": {
-    "/{realm}/protocol/openid-connect/token": {
+    "/token": {
       "post": {
         "summary": "Autentica Usuario e retorna um token de autorização",
         "description": "Rota responsável por autenticar o usuario validar refresh_token",
@@ -34,7 +34,7 @@
                   },
                   "grant_type": {
                     "type": "string",
-                    "enum": ["password", "refresh_token"]
+                    "enum": ["password", "refresh_token", "client_credentials"]
                   },
                   "client_secret": {
                     "type": "string"
@@ -58,14 +58,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "description": "helm keycloak",
-            "required": true
-          }
-        ],
         "responses": {
           "401": {
             "description": "Não autorizado"
@@ -122,7 +114,7 @@
         }
       }
     },
-    "/{realm}/protocol/openid-connect/logout": {
+    "/logout": {
       "post": {
         "summary": "Invalida Token",
         "description": "Rota responsável por invalidar refresh_token do usuario",
@@ -152,14 +144,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "realm",
-            "in": "path",
-            "description": "helm keycloak",
-            "required": true
-          }
-        ],
         "responses": {
           "401": {
             "description": "Não autorizado"
