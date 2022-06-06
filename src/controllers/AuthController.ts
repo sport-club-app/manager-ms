@@ -26,23 +26,11 @@ class AuthController {
 
   async registerUser (req: Request, res: Response, next: NextFunction) {
     const userRequestData: IRequestCreateUserDataDto = req.body
-    const access_token_admin = req.headers.authorization?.split(" ")[1]
-
+    const access_token = req.headers.authorization
     try {
-      const { token, expires }:IGetTokenResposeDataDto = await factory.getTokenApi.execute(process.env.CLIENT_ID)
-      if (!token || !expires || expires == -2) {
-        const { access_token } = await factory.login.execute({ grant_type: "client_credentials" })
-
-        const isSavedToken = await factory.saveTokenApi.execute(process.env.CLIENT_ID, access_token_admin || access_token)
-        if (!isSavedToken) {
-          throw new APIError("INTERNAL_SERVER", HttpStatusCode.INTERNAL_SERVER, true, BusinessError.SAVED_TOKEN)
-        }
-        const user: any = jwt_decode(access_token_admin || access_token)
-        const httpStatus = await factory.createUser.execute({ ...userRequestData, enabled: user.preferred_username === "service-account-manager-ms" ? false : userRequestData.enabled }, access_token_admin || access_token)
-        return res.send(httpStatus)
-      }
-      const user: any = jwt_decode(access_token_admin || token)
-      const httpStatus = await factory.createUser.execute({ ...userRequestData, enabled: user.preferred_username === "service-account-manager-ms" ? false : userRequestData.enabled }, access_token_admin || token)
+      const user: any = jwt_decode(access_token)
+      const role = user.realm_access?.roles.find(r => r === "API")
+      const httpStatus = await factory.createUser.execute({ ...userRequestData, enabled: role ? false : userRequestData.enabled }, access_token)
       return res.send(httpStatus)
     } catch (error) {
       return errorHandler.returnError(error, req, res, next)
