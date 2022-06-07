@@ -37,8 +37,8 @@
       "@Exceptions/*": [
         "./src/exceptions/*"
       ],
-      "@Factory/*": [
-        "./src/factory/*"
+      "@BindFactory/*": [
+        "src/bind-factory/*"
       ]
     }
   },

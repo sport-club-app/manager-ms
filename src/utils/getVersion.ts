@@ -1,5 +1,7 @@
 import { version } from "../../package.json"
 
-export const getVersionApi = () => {
+const getVersionApi = () => {
   return `v${version.substring(0, 1)}`
 }
+
+export const apiVersion = getVersionApi()

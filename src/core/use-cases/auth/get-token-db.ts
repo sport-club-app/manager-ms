@@ -1,6 +1,6 @@
 import { IAuthApiRepositoryDbMethods } from "@Repository/auth-api-repository"
-
-export class GetTokenApi {
+import { IUseCase } from "../interfaces"
+export class GetTokenApi implements IUseCase {
     private authApiRepository: IAuthApiRepositoryDbMethods
     constructor (authApiRepository: IAuthApiRepositoryDbMethods) {
       this.authApiRepository = authApiRepository

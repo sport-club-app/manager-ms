@@ -1,11 +1,7 @@
 import { clientRedis } from "@Infra/services/redis/config"
+import { IRepositoryDbMethodsBase, IGetTokenResposeDataDto } from "./interfaces"
 
-export interface IGetTokenResposeDataDto{
-  token: string
-  expires: number
-}
-
-export interface IAuthApiRepositoryDbMethods {
+export interface IAuthApiRepositoryDbMethods extends IRepositoryDbMethodsBase<any> {
     saveToken(apiId: string, token: string): Promise<any>;
     getToken(apiId: string): Promise<any>;
 }

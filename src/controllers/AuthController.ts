@@ -1,18 +1,22 @@
 import { NextFunction, Request, Response } from "express"
-import { IRequestLoginData } from "@Core/use-cases/auth/login"
-import { IRequestCreateUserDataDto } from "@Core/use-cases/user/create-user"
-import { authFactory } from "@Factory/auth/authFactory"
-import { APIError, HttpStatusCode } from "../exceptions/base-error"
+import { IRequestLoginDTO, IRequestCreateUserDataDTO } from "@Core/use-cases/interfaces"
+import { authFactory } from "src/bind-factory/auth/authFactory"
+import { HttpStatusCode } from "../exceptions/interfaces"
+import { APIError } from "../exceptions/base-error"
 import BusinessError from "@Exceptions/business-error"
 import { errorHandler } from "@Exceptions/error-handler"
-import { IGetTokenResposeDataDto } from "@Repository/auth-api-repository"
 import jwt_decode from "jwt-decode"
+import { IControllerHttpMethods } from "./interfaces"
 
 const factory = authFactory()
 
-class AuthController {
+export interface IAuthControllerHttpMethods extends IControllerHttpMethods{
+  login(req: Request, res: Response, next: NextFunction): Promise<Response<any>>
+  registerUser(req: Request, res: Response, next: NextFunction): Promise<Response<any>>
+}
+class AuthController implements IAuthControllerHttpMethods {
   async login (req: Request, res: Response, next: NextFunction) {
-    const requestData: IRequestLoginData = req.body
+    const requestData: IRequestLoginDTO = req.body
     try {
       const token = await factory.login.execute(requestData)
       if (!token.access_token) {
@@ -25,7 +29,7 @@ class AuthController {
   }
 
   async registerUser (req: Request, res: Response, next: NextFunction) {
-    const userRequestData: IRequestCreateUserDataDto = req.body
+    const userRequestData: IRequestCreateUserDataDTO = req.body
     const access_token = req.headers.authorization
     try {
       const user: any = jwt_decode(access_token)
