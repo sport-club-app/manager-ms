@@ -3,6 +3,8 @@ FROM node:14-slim
 
 SHELL [ "/bin/bash", "-c" ]
 
+RUN apt-get update && apt-get install curl -y
+
 USER node
 
 WORKDIR /home/node/app
