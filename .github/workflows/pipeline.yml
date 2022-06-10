@@ -11,7 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: make-test-build
+      - uses: actions/checkout@v1
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
