@@ -18,11 +18,15 @@ class AuthController implements IAuthControllerHttpMethods {
   async login (req: Request, res: Response, next: NextFunction) {
     const requestData: IRequestLoginDTO = req.body
     try {
-      const token = await factory.login.execute(requestData)
-      if (!token.access_token) {
+      const dataToken = await factory.login.execute(requestData)
+      if (!dataToken.access_token) {
         throw new APIError("NOT_FOUND", HttpStatusCode.NOT_FOUND, true, BusinessError.TOKEN_NOT_FOUND)
       }
-      return res.json(token)
+
+      const user: any = jwt_decode(dataToken.access_token)
+      await factory.deleteTokenDb.execute(user.sub)
+      await factory.saveTokenApi.execute(user.sub, dataToken.refresh_token)
+      return res.json(dataToken)
     } catch (error) {
       return errorHandler.returnError(error, req, res, next)
     }

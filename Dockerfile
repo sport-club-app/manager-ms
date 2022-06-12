@@ -13,15 +13,14 @@ COPY --chown=node package*.json ./
 
 RUN npm install
 
+USER root
+RUN npm install -g jest
+
+USER node
 COPY --chown=node . .
 
 RUN npm run build
 
-
-ENV HOST=localhost
-ENV APP_HOST=http://localhost
-ENV APP_PORT=3003
-ENV NODE_ENV=production
 
 RUN chmod +x .docker/entrypoint.sh
 ENTRYPOINT .docker/entrypoint.sh

@@ -5,7 +5,7 @@ const factory = authFactory()
 
 class GetTokenApi {
   public async execute () {
-    const { token, expires }:IGetTokenResposeDataDTO = await factory.getTokenApi.execute(process.env.CLIENT_ID)
+    const { token, expires }:IGetTokenResposeDataDTO = await factory.getTokenDb.execute(process.env.CLIENT_ID)
     if (!token || !expires || expires == -2) {
       const { access_token } = await factory.login.execute({ grant_type: "client_credentials" })
       return {

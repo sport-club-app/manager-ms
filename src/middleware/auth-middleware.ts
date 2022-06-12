@@ -2,7 +2,7 @@
 import { errorHandler } from "@Exceptions/error-handler"
 import { NextFunction, Request, Response } from "express"
 import { getTokenApi } from "@Core/use-cases/auth/get-token-api"
-import { saveTokendbCache } from "@Core/use-cases/auth/save-token-db-cahe"
+import { saveTokendbCache } from "@Core/use-cases/auth/save-token-db"
 
 class AuthMiddleware {
   public async execute (req: Request, res: Response, next: NextFunction) {

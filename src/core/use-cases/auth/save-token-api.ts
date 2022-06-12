@@ -6,7 +6,7 @@ export class SaveTokenApi implements IUseCase {
       this.authApiRepository = authApiRepository
     }
 
-    async execute (apiId: string, token: string) {
-      return this.authApiRepository.saveToken(apiId, token)
+    async execute (id: string, token: string) {
+      return this.authApiRepository.saveToken(id, token)
     }
 }
