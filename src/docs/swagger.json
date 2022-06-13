@@ -247,6 +247,48 @@
                     }
                 }
             }
+        },
+        "/refresh-token/{id}": {
+            "get": {
+                "summary": "Retorna refresh_token salvo em manager-db-cache",
+                "description": "Rota responsável por retornar refresh_token",
+                "tags": ["Refresh Token"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id do usuario",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Não autorizado"
+                    },
+                    "403": {
+                        "description": "Não autorizado"
+                    },
+                    "200": {
+                        "description": "ok",
+                        "content": {
+                            "aplication/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "refresh_token": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "expires": 275,
+                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI4ODkyOTMwZC02MTA0LTRhYTMtYjhmZi00OTQ3YjYwODY5OWYifQ.eyJleHAiOjE2NTM3OTg4MTQsImlhdCI6MTY1Mzc5NzAxNCwianRpIjoiMzRhM2YxNWYtMjlmZS00ZTk1LWFhMzUtYThjYzI0YzI1OGFjIiwiaXNzIjoiaHR0cDovLzEwLjAuMC4xNzI6MzAwMy9hdXRoL3JlYWxtcy9kZXYtaGVsbSIsImF1ZCI6Imh0dHA6Ly8xMC4wLjAuMTcyOjMwMDMvYXV0aC9yZWFsbXMvZGV2LWhlbG0iLCJzdWIiOiJhMzQ4NzI3Ny1mMzkzLTQyOWMtOWZmZC1kZmM1ZDIwNTA0YTMiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoicGFydG5lcnMtbXMiLCJzZXNzaW9uX3N0YXRlIjoiZmNmNzk0NTctN2JjZC00Y2U0LWFlMTgtZDczOGRiMDkyMTIxIiwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwic2lkIjoiZmNmNzk0NTctN2JjZC00Y2U0LWFlMTgtZDczOGRiMDkyMTIxIn0.lBD26qVVQc_fSXZ6VZvGt-veDqkLjM1HT5-NxxaYpZM"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

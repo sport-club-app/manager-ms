@@ -6,7 +6,7 @@ export class GetTokenDb implements IUseCase {
       this.authApiRepository = authApiRepository
     }
 
-    async execute (apiId: string) {
-      return this.authApiRepository.getToken(apiId)
+    async execute (id: string) {
+      return this.authApiRepository.getToken(id)
     }
 }
