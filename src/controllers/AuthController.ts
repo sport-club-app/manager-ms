@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { IRequestLoginDTO, IRequestCreateUserDataDTO } from "@Core/use-cases/interfaces"
+import { IRequestLoginDTO, IRequestCreateUserDataDTO, IRequestRefreshTokenValidate } from "@Core/use-cases/interfaces"
 import { authFactory } from "src/bind-factory/auth/authFactory"
 import { HttpStatusCode } from "../exceptions/interfaces"
 import { APIError } from "../exceptions/base-error"
@@ -14,6 +14,7 @@ export interface IAuthControllerHttpMethods extends IControllerHttpMethods{
   login(req: Request, res: Response, next: NextFunction): Promise<Response<any>>
   registerUser(req: Request, res: Response, next: NextFunction): Promise<Response<any>>
   getRefreshToken(req: Request, res: Response, next: NextFunction): Promise<Response<any>>
+  refreshTokenValidate(req: Request, res: Response, next: NextFunction): Promise<Response<any>>
 }
 class AuthController implements IAuthControllerHttpMethods {
   async login (req: Request, res: Response, next: NextFunction) {
@@ -49,6 +50,16 @@ class AuthController implements IAuthControllerHttpMethods {
   async getRefreshToken (req: Request, res: Response, next: NextFunction) {
     try {
       const refreshToken = await factory.getTokenDb.execute(req.params.id)
+      return res.json(refreshToken)
+    } catch (error) {
+      return errorHandler.returnError(error, req, res, next)
+    }
+  }
+
+  async refreshTokenValidate (req: Request, res: Response, next: NextFunction) {
+    const requestData: IRequestRefreshTokenValidate = req.body
+    try {
+      const refreshToken = await factory.refreshTokenValidate.execute(requestData)
       return res.json(refreshToken)
     } catch (error) {
       return errorHandler.returnError(error, req, res, next)

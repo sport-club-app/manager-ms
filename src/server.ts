@@ -26,6 +26,6 @@ process.on("unhandledRejection", (reason, promise) => {
 
 server.use(errorHandler.logErrorMiddleware)
 server.use(errorHandler.returnError)
-server.use(authMiddleware.execute)
+// server.use(authMiddleware.execute)
 
 server.use(`/${apiVersion}`, router)

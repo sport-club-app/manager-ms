@@ -20,6 +20,11 @@ export interface IRequestLoginDTO{
   password?: string
 }
 
+export interface IRequestRefreshTokenValidate{
+  grant_type: "refresh_token"
+  refresh_token: string
+}
+
 export interface IRequestCreateUserDataDTO {
     username: string
     password: string
