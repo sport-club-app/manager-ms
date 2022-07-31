@@ -19,13 +19,8 @@ server.get("/", (_, res) => {
   res.redirect(`/${apiVersion}/health`)
 })
 
-process.on("unhandledRejection", (reason, promise) => {
-  console.log("Unhandled Rejection at:", reason)
-  process.exit(1)
-})
-
 server.use(errorHandler.logErrorMiddleware)
 server.use(errorHandler.returnError)
-// server.use(authMiddleware.execute)
+server.use(authMiddleware.execute)
 
 server.use(`/${apiVersion}`, router)

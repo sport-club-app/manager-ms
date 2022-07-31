@@ -7,6 +7,8 @@ import BusinessError from "@Exceptions/business-error"
 import { errorHandler } from "@Exceptions/error-handler"
 import jwt_decode from "jwt-decode"
 import { IControllerHttpMethods } from "./interfaces"
+import { logger } from "@Infra/services/logger/config"
+import crypto from "crypto"
 
 const factory = authFactory()
 
@@ -20,16 +22,20 @@ class AuthController implements IAuthControllerHttpMethods {
   async login (req: Request, res: Response, next: NextFunction) {
     const requestData: IRequestLoginDTO = req.body
     try {
+      logger.info("Usuario logando", { user: { ...requestData, password: null } as IRequestLoginDTO })
       const dataToken = await factory.login.execute(requestData)
       if (!dataToken.access_token) {
+        logger.error("Token NOT_FOUND", { component: AuthController.name, method: "login" })
         throw new APIError("NOT_FOUND", HttpStatusCode.NOT_FOUND, true, BusinessError.TOKEN_NOT_FOUND)
       }
 
       const user: any = jwt_decode(dataToken.access_token)
       await factory.deleteTokenDb.execute(user.sub)
       await factory.saveTokenApi.execute(user.sub, dataToken.refresh_token)
+      logger.info("Usuario Logado!", { token: dataToken })
       return res.json(dataToken)
     } catch (error) {
+      logger.error("Erro ao logar usuario", { user: { ...requestData, password: null } as IRequestLoginDTO, error: error, component: AuthController.name, method: "login" })
       return errorHandler.returnError(error, req, res, next)
     }
   }
@@ -38,11 +44,14 @@ class AuthController implements IAuthControllerHttpMethods {
     const userRequestData: IRequestCreateUserDataDTO = req.body
     const access_token = req.headers.authorization
     try {
+      logger.info("Solicitando token de autotizacao", { access_token: crypto.randomUUID() })
       const user: any = jwt_decode(access_token)
       const role = user.realm_access?.roles.find(r => r === "API")
       const httpStatus = await factory.createUser.execute({ ...userRequestData, enabled: role ? false : userRequestData.enabled }, access_token)
+      logger.info("Usuario Criado", { user: { ...userRequestData, credentials: null } as IRequestCreateUserDataDTO, component: AuthController.name, method: "registerUser" })
       return res.send(httpStatus)
     } catch (error) {
+      logger.error("Error ao criar Usuario", { user: { ...userRequestData, credentials: null } as IRequestCreateUserDataDTO, error: error, component: AuthController.name, method: "registerUser" })
       return errorHandler.returnError(error, req, res, next)
     }
   }

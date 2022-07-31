@@ -8,7 +8,6 @@ export enum HttpStatusCode {
 }
 
 export interface IErrorHandlerMethods{
-    logError(err: any): Promise<void>
     logErrorMiddleware(error: any, req: Request, res: Response, next: NextFunction): Promise<void>
     returnError(error: any, req: Request, res: Response, next: NextFunction): Promise<Response<any>>
     isOperationalError(error: any): Promise<boolean>

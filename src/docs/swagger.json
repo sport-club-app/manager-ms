@@ -21,7 +21,7 @@
         "/login": {
             "post": {
                 "summary": "Autentica Usuario e retorna um token de autorização",
-                "description": "Rota responsável por autenticar o usuario validar refresh_token",
+                "description": "Para logar em um APP especifico, Passe o client_id e o client_credentials. exemplo: para logar no parners-ms, passar o client_id partners-ms, e crendecial de service-account",
                 "tags": ["Login"],
                 "requestBody": {
                     "content": {

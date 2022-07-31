@@ -7,18 +7,16 @@ import { IErrorHandlerMethods } from "./interfaces"
 // free to extend the BaseError
 
 class ErrorHandler implements IErrorHandlerMethods {
-  public async logError (err: any) {
-    await logger.error(
+  static logError (err: any) {
+    logger.error(
       "Error message from the centralized error-handling component",
       err
     )
   }
 
   public async logErrorMiddleware (error: any, req: Request, res: Response, next: NextFunction) {
-    if (!error) {
-      next("route")
-    }
-    this.logError(error)
+    if (!error) next("route")
+    ErrorHandler.logError(error)
     next(error)
   }
 
@@ -27,9 +25,7 @@ class ErrorHandler implements IErrorHandlerMethods {
   }
 
   public async isOperationalError (error) {
-    if (error instanceof BaseError) {
-      return error.isOperational
-    }
+    if (error instanceof BaseError) return error.isOperational
     return false
   }
 }
