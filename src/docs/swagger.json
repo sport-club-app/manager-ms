@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
-        "title": "Api de gerenciamento de Usuários",
+        "title": "Manager Api",
         "description": "Tem por objetivo gerenciar autenticação e autorização de usuarios",
         "termsOfService": "https://gitlab.com/sport-clube/micro-services/manager-ms",
         "contact": {
